@@ -70,8 +70,6 @@
         [alertImage addActions:@[cancelAction, action]];
         [self presentViewController:alertImage animated:true completion:nil];
         
-        
-        
         return;
     }
     
