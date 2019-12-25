@@ -28,7 +28,8 @@
                     @"PresentSlideDown & DismissSlideDown",
                     @"PresentSlideUp & DismissSlideUp",
                     @"PresentSlideLeft & DismissSlideLeft",
-                    @"PresentSlideRight & DismissSlideRight"];
+                    @"PresentSlideRight & DismissSlideRight",
+                    @"带图片的alert"];
     
     UITableView *demoTable = [[UITableView alloc] initWithFrame:self.view.frame];
     demoTable.delegate = self;
@@ -49,6 +50,35 @@
 /** 使用看这里！ */
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    
+    if (indexPath.row == 9) {
+        ASPopupController *alertImage = [ASPopupController alertWithImage:[UIImage imageNamed:@"pop_img_tips"] title:@"温馨提示" message:@"确定关闭吗？"];
+        
+        [alertImage setAlertViewCornerRadius:12];
+        alertImage.alertView.titleLabel.font = [UIFont systemFontOfSize:14];
+        alertImage.alertView.titleLabel.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1.0];
+        alertImage.alertView.messageLabel.font = [UIFont systemFontOfSize:14];
+        alertImage.alertView.messageLabel.textColor = [UIColor colorWithRed:34/255.0 green:34/255.0 blue:34/255.0 alpha:1.0];
+        
+        ASPopupAction *action = [ASPopupAction actionWithTitle:@"确定" style:ASPopupActionStyleDefault handler:^{
+
+        }];
+        ASPopupAction *cancelAction = [ASPopupAction actionWithTitle:@"取消" style:ASPopupActionStyleCancel handler:^{
+            
+        }];
+        [alertImage addActions:@[cancelAction, action]];
+        [self presentViewController:alertImage animated:true completion:nil];
+        
+        
+        
+        return;
+    }
+    
+    
+    
+    
+    
     
     ASPopupController *alert = [ASPopupController alertWithTitle:@"警告！警告！💥"
                                                          message:@"逗你玩儿呢 ~ 😜"];

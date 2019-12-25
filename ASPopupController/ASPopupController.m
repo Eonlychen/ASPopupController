@@ -142,6 +142,21 @@
     return alertController;
 }
 
+/** 默认带图片转场初始化 */
++ (_Nonnull instancetype)alertWithImage:(UIImage * _Nullable)image
+                                  title:(NSString * _Nullable)title
+                                message:(NSString * _Nullable)message {
+    
+    ASPopupController *alertController = [[ASPopupController alloc] init];
+    alertController.presentStyle = ASPopupPresentStyleSystem;
+    alertController.dismissStyle = ASPopupDismissStyleFadeOut;
+    alertController.alertView = [[ASPopupView alloc] initWithImage:image title:title message:message];
+    alertController.alertView.controller = alertController;
+    return alertController;
+}
+
+
+
 #pragma mark - UIViewControllerTransitioningDelegate
 
 /** 返回Present动画 */

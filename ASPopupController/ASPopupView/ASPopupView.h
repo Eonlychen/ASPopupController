@@ -12,6 +12,13 @@
 
 @interface ASPopupView : UIView
 
+/** 标题 */
+@property (nonatomic, strong)UILabel * _Nonnull titleLabel;
+
+/** 消息 */
+@property (nonatomic, strong)UILabel * _Nonnull messageLabel;
+
+
 /** 保存当前的视图控制器，用来dismiss */
 @property (nonatomic, weak, nullable)UIViewController *controller;
 
@@ -23,6 +30,7 @@
  */
 - (_Nonnull instancetype)initWithTitle:(NSString * _Nullable)title message:(NSString * _Nullable)message;
 
+- (_Nonnull instancetype)initWithImage:(UIImage *_Nonnull)image title:(NSString * _Nullable)title message:(NSString * _Nullable)message;
 /**
  *    添加一个 action
  *

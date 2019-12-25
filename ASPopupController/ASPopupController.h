@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ASPopupAction.h"
 #import "ASPopupHeader.h"
-
-@class ASPopupView;
+#import "ASPopupView/ASPopupView.h"
 
 /** 灰色背景透明度 */
 static const CGFloat as_backgroundAlpha = 0.4;
@@ -18,7 +17,7 @@ static const CGFloat as_backgroundAlpha = 0.4;
 @interface ASPopupController : UIViewController
 
 /** alert 视图 */
-@property (nonnull, nonatomic, strong)UIView *alertView;
+@property (nonnull, nonatomic, strong)ASPopupView *alertView;
 
 /** 半透明背景 */
 @property (nonnull, nonatomic, strong)UIView *backgroundView;
@@ -70,5 +69,10 @@ static const CGFloat as_backgroundAlpha = 0.4;
  */
 + (_Nonnull instancetype)alertWithTitle:(NSString * _Nullable)title
                                 message:(NSString * _Nullable)message;
+
++ (_Nonnull instancetype)alertWithImage:(UIImage * _Nullable)image
+                                  title:(NSString * _Nullable)title
+                                message:(NSString * _Nullable)message;
+
 
 @end

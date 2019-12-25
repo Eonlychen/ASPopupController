@@ -35,11 +35,6 @@ const static CGFloat buttonHeight = 40.0;
 /** 滚动视图 */
 @property (nonatomic, strong)UIScrollView *scrollView;
 
-/** 标题 */
-@property (nonatomic, strong)UILabel *titleLabel;
-
-/** 消息 */
-@property (nonatomic, strong)UILabel *messageLabel;
 
 /** 按钮白色背景 */
 @property (nonatomic, strong)UIImage *whiteImage;
@@ -275,6 +270,209 @@ const static CGFloat buttonHeight = 40.0;
     
     return self;
 }
+
+
+- (_Nonnull instancetype)initWithImage:(UIImage *)image title:(NSString * _Nullable)title message:(NSString * _Nullable)message {
+    self = [super init];
+    if (!self) { return nil; };
+    
+    self.layer.cornerRadius = 12;
+    self.clipsToBounds = YES;
+    self.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    
+    // 初始化
+    _containerView = [[UIView alloc] init];
+    _scrollView = [[UIScrollView alloc] init];
+    _titleLabel = [[UILabel alloc] init];
+    _messageLabel = [[UILabel alloc] init];
+    
+    // 添加到父视图
+    [self addSubview:_containerView];
+    [_containerView addSubview:_scrollView];
+    [_scrollView addSubview:_titleLabel];
+    [_scrollView addSubview:_messageLabel];
+    
+    // 设置 containerView
+    _containerView.backgroundColor = [UIColor whiteColor];
+    
+    // 设置 titleLabel
+    NSTextAttachment *textAtta = [[NSTextAttachment alloc] init];
+    textAtta.image = image;
+    NSAttributedString *textAttrStr = [NSAttributedString attributedStringWithAttachment:textAtta];
+    NSMutableAttributedString *mutableAttrStr = [[NSMutableAttributedString alloc] initWithAttributedString:textAttrStr];
+    
+    NSAttributedString *titleAttrStr = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@",title]];
+    [mutableAttrStr appendAttributedString:titleAttrStr];
+    
+    [mutableAttrStr addAttribute: NSBaselineOffsetAttributeName value:@(-3.0) range: NSMakeRange(0,1)];
+    _titleLabel.attributedText = mutableAttrStr;
+    
+//    _titleLabel.text = title;
+//    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel.numberOfLines = 0;
+//    _titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    
+    // 设置 messageLabel
+    _messageLabel.text = message;
+    _messageLabel.textAlignment = NSTextAlignmentCenter;
+    _messageLabel.numberOfLines = 0;
+//    _messageLabel.font = [UIFont systemFontOfSize:13.0];
+    
+    // 添加约束 titleLabel
+    _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint constraintWithItem:_titleLabel
+                                 attribute:NSLayoutAttributeWidth
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:nil
+                                 attribute:NSLayoutAttributeNotAnAttribute
+                                multiplier:1.0
+                                  constant:containerWidth].active = YES;
+    [NSLayoutConstraint constraintWithItem:_titleLabel
+                                 attribute:NSLayoutAttributeBottom
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_messageLabel
+                                 attribute:NSLayoutAttributeTop
+                                multiplier:1.0
+                                  constant:-padding].active = YES;
+    [NSLayoutConstraint constraintWithItem:_titleLabel attribute:NSLayoutAttributeTop
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_scrollView
+                                 attribute:NSLayoutAttributeTop
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_titleLabel attribute:NSLayoutAttributeLeft
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_scrollView
+                                 attribute:NSLayoutAttributeLeft
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_titleLabel attribute:NSLayoutAttributeRight
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_scrollView
+                                 attribute:NSLayoutAttributeRight
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    
+    // 添加约束 messageLabel
+    _messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint constraintWithItem:_messageLabel
+                                 attribute:NSLayoutAttributeWidth
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:nil
+                                 attribute:NSLayoutAttributeNotAnAttribute
+                                multiplier:1.0
+                                  constant:containerWidth].active = YES;
+    [NSLayoutConstraint constraintWithItem:_messageLabel
+                                 attribute:NSLayoutAttributeLeft
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_scrollView
+                                 attribute:NSLayoutAttributeLeft
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_messageLabel
+                                 attribute:NSLayoutAttributeBottom
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_scrollView
+                                 attribute:NSLayoutAttributeBottom
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_messageLabel
+                                 attribute:NSLayoutAttributeRight
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_scrollView
+                                 attribute:NSLayoutAttributeRight
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    
+    // 添加约束 scrollView
+//    CGFloat scrollViewHeight = titleHeight+messageHeight+padding;
+    CGFloat scrollViewHeight = [_titleLabel sizeThatFits:CGSizeMake(containerWidth, 0)].height+[_messageLabel sizeThatFits:CGSizeMake(containerWidth, 0)].height+padding;
+    _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint constraintWithItem:_scrollView
+                                 attribute:NSLayoutAttributeWidth
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:nil
+                                 attribute:NSLayoutAttributeNotAnAttribute
+                                multiplier:1.0
+                                  constant:containerWidth].active = YES;
+    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:_scrollView
+                                 attribute:NSLayoutAttributeHeight
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:nil
+                                 attribute:NSLayoutAttributeNotAnAttribute
+                                multiplier:1.0
+                                  constant:scrollViewHeight];
+    heightConstraint.priority = UILayoutPriorityDefaultLow;
+    heightConstraint.active = YES;
+    [NSLayoutConstraint constraintWithItem:_scrollView
+                                 attribute:NSLayoutAttributeLeft
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_containerView
+                                 attribute:NSLayoutAttributeLeft
+                                multiplier:1.0
+                                  constant:15.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_scrollView
+                                 attribute:NSLayoutAttributeTop
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_containerView
+                                 attribute:NSLayoutAttributeTop
+                                multiplier:1.0
+                                  constant:15.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_scrollView
+                                 attribute:NSLayoutAttributeRight
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_containerView
+                                 attribute:NSLayoutAttributeRight
+                                multiplier:1.0
+                                  constant:-15.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_scrollView
+                                 attribute:NSLayoutAttributeBottom
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:_containerView
+                                 attribute:NSLayoutAttributeBottom
+                                multiplier:1.0
+                                  constant:-15.0].active = YES;
+
+    
+    // 添加约束 containerView
+    _containerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint constraintWithItem:_containerView
+                                 attribute:NSLayoutAttributeLeft
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:self
+                                 attribute:NSLayoutAttributeLeft
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_containerView
+                                 attribute:NSLayoutAttributeTop
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:self
+                                 attribute:NSLayoutAttributeTop
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    [NSLayoutConstraint constraintWithItem:_containerView
+                                 attribute:NSLayoutAttributeRight
+                                 relatedBy:NSLayoutRelationEqual
+                                    toItem:self
+                                 attribute:NSLayoutAttributeRight
+                                multiplier:1.0
+                                  constant:0.0].active = YES;
+    
+    // 添加约束 self
+    CGFloat maxHeight = [UIScreen mainScreen].bounds.size.height - 100.0;
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint constraintWithItem:self
+                                 attribute:NSLayoutAttributeHeight
+                                 relatedBy:NSLayoutRelationLessThanOrEqual
+                                    toItem:nil
+                                 attribute:NSLayoutAttributeNotAnAttribute
+                                multiplier:1.0
+                                  constant:maxHeight].active = YES;
+    
+    return self;
+}
+
+
 
 /** 添加 action */
 - (void)addAction:(ASPopupAction * _Nonnull)action {
